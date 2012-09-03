@@ -1,0 +1,5 @@
+#!/bin/bash
+# The logic to stop your application should be put in this script.
+# save as .openshift/action_hooks/stop
+kill `ps -ef | grep clojure | grep -v "grep clojure" | awk '{ print $2 }'` >${OPENSHIFT_LOG_DIR}/stop.log 2>&1
+exit 0
