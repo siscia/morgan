@@ -23,60 +23,9 @@
 (defpage "/greet" []
   (str "Hi " (session/get :username) " you are logged in."))
 
-(defpage "/user/add" {:as user}
-  (common/layout
-    (form-to [:post "/user/add"]
-            (common/new-user user)
-            (submit-button "Add user"))))
-
-(defn valid-new-user? [{:keys [username password email] :as user}]
-  (vali/rule  (u/valid-new-user user)
-             [:username "Your name is already in use, pick another one"])
-  (vali/rule (vali/has-value? password)
-             [:password "You need to choose a password"])
-  (vali/rule (vali/is-email? email)
-             [:email "Please put a valid email"])
-  (not (vali/errors? :username :password :email )))
-
-
-(defpage [:post "/user/add"] {:as user}
-  (if (valid-new-user? user)
-    (do
-      (println "New user" user)
-      (u/add-user user)
-      (common/layout
-       [:p "User added!"]))
-     (render "/user/add" user)))
-
-(defpage "/user/login" {:as user}
-  (common/layout
-   (form-to [:post "/user/login"]
-            (common/login user)
-            (submit-button "login"))))
-
-(defn valid-login? [{:keys [username password] :as user}]
-  (vali/rule (u/auth? user)
-             [:password "Wrong login, try again"])
-  (not (vali/errors? :username :password)))
-
-(defpage [:post "/user/login"] {:as user}
-  (if (valid-login? user)
-    (do
-      (println user "login")
-      (u/login-user user)
-      (common/layout
-       [:p "User logged in"]))
-    (render "/user/login" user)))
-
-(defpage "/user/logout" []
-  (common/layout
-   [:p (str "You are gonna log out " (session/get :username))])
-  (println "You are gonna log out " (session/get :username))
-  (u/logout-user))
-
 (pre-route "/task/*" {}
           (when-not (u/is-loged?)
-            (redirect "/user/login")))
+            (redirect "/login")))
 
 (defpage [:post "/task/add"] {:keys [task date]}
   (println task date)
