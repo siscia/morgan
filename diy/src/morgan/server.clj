@@ -1,6 +1,6 @@
 (ns morgan.server
   (:require [noir.server :as server]
-            [morgan.noir-auth-app.models :as models]
+            [morgan.models :as models]
             [clojurewerkz.quartzite.scheduler :as qs])
   (:use [morgan.models.schedule :only [job trigger]]))
 

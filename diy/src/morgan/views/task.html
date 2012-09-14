@@ -1,0 +1,36 @@
+<title>Morgan Task</title>
+
+<script src="http://code.jquery.com/jquery-1.7.2.min.js" 
+        type="text/javascript"></script>
+<script src="http://code.jquery.com/ui/1.8.21/jquery-ui.min.js" 
+        type="text/javascript"></script>
+<script src="/js/jQuery-Timepicker-Addon/jquery-ui-timepicker-addon.js"
+        type="text/javascript"></script>
+<script src="/js/jQuery-Timepicker-Addon/jquery-ui-sliderAccess.js"
+        type="text/javascript"></script>
+<link href="http://code.jquery.com/ui/1.8.21/themes/ui-lightness/jquery-ui.css"
+        rel="stylesheet" type="text/css" />
+<link href="/js/jQuery-Timepicker-Addon.css" rel="stylesheet"
+        type="text/css" />
+
+<script src="/js/jQuery-Timepicker-Addon/getdate.datetimepicker.js"
+        type="text/javascript"></script>
+
+<table>
+  <tr id="task_row">
+    <th>Task</th>
+    <th>Date</th>
+    <th>Action</th>
+
+    <form class="form-new-task" method="post">
+      <input id="get-task" name="new-task" required="required" type="text">
+      <input id="getdate" name="date" require="require" type="text"/>
+      <input type="submit" value="Add task">
+    </form>
+
+  <tr id="tasks">
+    <td class="task">Buy Milk</td>
+    <td class="date">Tomorrow</td>
+  </tr>
+</table>
+

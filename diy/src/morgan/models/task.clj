@@ -3,7 +3,8 @@
             [clj-time.core :as t])
   (:use [clj-time.format :only [formatter parse]]
         [monger.joda-time]
-        [monger.operators]))
+        [monger.operators])
+  (:import [org.bson.types ObjectId]))
 
 ;; 22-08-2012 00:00 +0200
 
@@ -15,14 +16,14 @@
         date (parse c time)]
      date))
 
-(defn memorize-task [task time username]
+(defn memorize-task [task time user-id]
   (let [time (read-time time)
-        id-user (:_id (mc/find-one-as-map "user" {:username username}))
         date-remember (sort (filter #(t/before? (t/now) %) (map #(t/minus time %) [(t/months 3) (t/months 1) (t/weeks 2) (t/weeks 1) (t/days 5) (t/days 2) (t/days 1)])))]
-    (println task (class task))
-    (mc/insert "task" {:task task
+    (println task)
+    (mc/insert "task" {:id (ObjectId.)
+                       :task task
                        :time time
-                       :id_user id-user
+                       :id_user user-id
                        :next_remember (first date-remember)
                        :date_remember (vec (next date-remember))})))
 
@@ -33,4 +34,7 @@
 (defn update-task [oid]
   (let [next-remember (-> (mc/find-map-by-id "task" oid) :date_remember first)]
     (mc/update-by-id "task" oid { $pop {:date_remember -1}
-                                  $set {:next_remember next-remember}})))
+                                 $set {:next_remember next-remember}})))
+
+(defn task-from-user-id [user-id]
+  (mc/find-maps "task" {:id_user (ObjectId. (str user-id))}))

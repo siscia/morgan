@@ -43,7 +43,8 @@
                            [clojurewerkz/quartzite "1.0.0-rc6"]
                            [abengoa/clj-stripe "1.0.0"]
                            [jayq "0.1.0-alpha4"]
-                           [fetch "0.1.0-alpha2"]]
+                           [fetch "0.1.0-alpha2"]
+                           [enlive "1.0.1"]]
             :dev-dependencies [[swank-clojure "1.4.0-SNAPSHOT"]
                                [lein-checkouts "1.0.0"]]
             :main morgan.server)

@@ -1,6 +1,5 @@
 (ns morgan.models.user
   (:require [noir.util.crypt :as crypy]
-            [monger.core :as mg]
             [monger.collection :as mc]
             [noir.session :as session]))
 

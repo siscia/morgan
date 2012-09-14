@@ -1,6 +1,5 @@
 (ns morgan.views.welcome
   (:require [morgan.views.common :as common]
-            [noir.content.getting-started]
             [morgan.models.user :as u]
             [noir.validation :as vali]
             [noir.session :as session]
@@ -23,30 +22,14 @@
 (defpage "/greet" []
   (str "Hi " (session/get :username) " you are logged in."))
 
-(pre-route "/task/*" {}
-          (when-not (u/is-loged?)
-            (redirect "/login")))
-
-(defpage [:post "/task/add"] {:keys [task date]}
-  (println task date)
-  (t/memorize-task task date (session/get :username))
-  (common/layout [:p (str "Task added" task date session/get :username)]))
-
-(defpage "/task/add" {:as task}
-  (common/layout
-   (form-to [:post "/task/add"]
-           (common/layout
-            (common/get-new-task task)
-            (submit-button "Add task")))))
-
 (defpage "/send-email" []
   (let [tasks (t/next-tasks)]
-    (println tasks)
+    (println "task to send ---------->" tasks)
     (future (e/remember-email tasks))
     (doall
      (map t/update-task (map :_id tasks))))
   (common/layout
-   [:p "ok"]))
+   [:p (str "ok")]))
 
 (defpage "/card" {:as token}
   (common/layout

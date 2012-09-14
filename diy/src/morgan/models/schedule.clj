@@ -22,4 +22,4 @@
                  (t/start-now)
                  (t/with-schedule (s/schedule
                                    (s/repeat-forever)
-                                   (s/with-interval-in-minutes 3)))))
+                                   (s/with-interval-in-minutes 200)))))
