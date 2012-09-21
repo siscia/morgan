@@ -20,7 +20,7 @@
   (let [time (read-time time)
         date-remember (sort (filter #(t/before? (t/now) %) (map #(t/minus time %) [(t/months 3) (t/months 1) (t/weeks 2) (t/weeks 1) (t/days 5) (t/days 2) (t/days 1)])))]
     (println task)
-    (mc/insert "task" {:id (ObjectId.)
+    (mc/insert "task" {:_id (ObjectId.)
                        :task task
                        :time time
                        :id_user user-id
@@ -38,3 +38,7 @@
 
 (defn task-from-user-id [user-id]
   (mc/find-maps "task" {:id_user (ObjectId. (str user-id))}))
+
+(defn delete-task [user-id task-id]
+  (mc/remove "task" {:id_user (ObjectId. (str user-id))
+                     :_id (ObjectId. (str task-id))}))

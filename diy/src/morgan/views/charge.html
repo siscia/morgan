@@ -1,0 +1,24 @@
+<div id="register">
+  <form action="/charge" id="payment-form" method="POST">
+    <label for="username">Username: </label>
+    <input id="" name="username" required="required" type="text">
+    <label for="password">Password: </label>
+    <input id="" name="password" required="required" type="text">
+    <label for="email">E-mail: </label>
+    <input id="" name="email" required="required" type="text">
+    <span class="payment-errors"></span>
+    <label for="number">Card Number: </label>
+    <input autocomplete="off" class="card-number" id="" name=""
+           require="require" size="20" type="text">
+    <label for="cvc">cvc: </label>
+    <input autocomplete="off" class="card-cvc" id="" name=""
+           require="require" size="4" type="text">
+    <label for="month">Expire month (mm): </label>
+    <input class="card-expiry-month" id="" name="" require="require"
+           size="2" type="text">
+    <label for="year">Expire year (yyyy): </label>
+    <input class="card-expiry-year" id="" name="" require="require"
+           size="4" type="text">
+    <input type="submit" value="register">
+  </form>
+</div>

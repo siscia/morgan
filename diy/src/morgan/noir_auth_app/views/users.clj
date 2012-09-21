@@ -194,35 +194,36 @@
 
 
 ; https://github.com/ibdknox/Noir-blog/blob/master/src/noir_blog/views/admin.clj
+
 (defpage "/login" {:as user}
   (if (session/get :user-id)
-      (resp/redirect "/")
-      ;
-      ; Notice that here 5 parameters are passed to common/layout. Because of
-      ; the & introducing the 'content' argument in the common/layout definition,
-      ; Clojure will bind 'content' to a _sequence_ of the last four parameters.
-      ;
-      (common/layout (i18n/translate :login-page-title)
-        ; named "notice" like the same type of flash messages in Rails
-        ; http://guides.rubyonrails.org/action_controller_overview.html#the-flash
-        ; http://webnoir.org/tutorials/sessions
-        (when-let [notice (session/flash-get)] [:p.notice notice])
-        (form-to [:post "/login"]
-                 (login-fields user)
-                 [:p (link-to "/password-resets" "forgot password?")]
-                 ; Here's a button that's nested in a paragraph, both have
-                 ; vertical margins (see CSS) but there's no margin collapsing
-                 ; because the button is an inline-block element (see CSS
-                 ; display property in Chrome for example) and margin collapsing
-                 ; only happens with block elements
-                 ; http://pinboard.in/u:xavi/b:dfef44c4248b
-                 [:p (submit-button "Log in")])
-        [:hr]
-        ; Here there is margin collapsing between the paragraph and the
-        ; nested button, i.e. the margin for <p> and the margin for <a> do not
-        ; add up. Because of this, the desired total margin must be specified
-        ; in one of the elements, in this case the button (see CSS).
-        [:p (link-to {:class "button signup"} "/signup" "Sign up...")])))
+    (resp/redirect "/")
+                                        ;
+                                        ; Notice that here 5 parameters are passed to common/layout. Because of
+                                        ; the & introducing the 'content' argument in the common/layout definition,
+                                        ; Clojure will bind 'content' to a _sequence_ of the last four parameters.
+                                        ;
+    (common/layout (i18n/translate :login-page-title)
+                                        ; named "notice" like the same type of flash messages in Rails
+                                        ; http://guides.rubyonrails.org/action_controller_overview.html#the-flash
+                                        ; http://webnoir.org/tutorials/sessions
+                   (when-let [notice (session/flash-get)] [:p.notice notice])
+                   (form-to [:post "/login"]
+                            (login-fields user)
+                            [:p (link-to "/password-resets" "forgot password?")]
+                                        ; Here's a button that's nested in a paragraph, both have
+                                        ; vertical margins (see CSS) but there's no margin collapsing
+                                        ; because the button is an inline-block element (see CSS
+                                        ; display property in Chrome for example) and margin collapsing
+                                        ; only happens with block elements
+                                        ; http://pinboard.in/u:xavi/b:dfef44c4248b
+                            [:p (submit-button "Log in")])
+                   [:hr]
+                                        ; Here there is margin collapsing between the paragraph and the
+                                        ; nested button, i.e. the margin for <p> and the margin for <a> do not
+                                        ; add up. Because of this, the desired total margin must be specified
+                                        ; in one of the elements, in this case the button (see CSS).
+                   [:p (link-to {:class "button signup"} "/signup" "Sign up...")])))
 
 
 (defpage [:post "/login"] {:as credentials}

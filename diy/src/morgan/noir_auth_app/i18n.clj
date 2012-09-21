@@ -1,8 +1,9 @@
 (ns morgan.noir-auth-app.i18n
-  (use hiccup.page-helpers)
-  (use morgan.noir-auth-app.utilities)
+  (:use [hiccup.page-helpers]
+        [morgan.noir-auth-app.utilities])
 
-  (:require [morgan.noir-auth-app.config :as config]))
+  (:require [morgan.noir-auth-app.config :as config]
+            [net.cgrand.enlive-html :as html]))
 
 
 ; Because only one language was needed, this actually doesn't handle
@@ -19,6 +20,9 @@
 
 (def contact-link (str "<a href=\"mailto:" config/contact-email "\">"
                        config/contact-email "</a>"))
+
+(def contact {:title config/contact-email
+              :href (str "mailto:" config/contact-email)})
 
 ; Instead of
 ;   (def translations {:greeting #(str "hello " (:username %) "!")})
@@ -182,7 +186,27 @@
             "Username must be less than 30 characters.")      
    :username-too-short
       (fn [_]
-            "Username must be at least 2 characters.")})
+        "Username must be at least 2 characters.")
+   :wrong-login-credential
+   (fn [_]
+     "Wrong username/email or password")})
+
+(html/defsnippet translation "morgan/noir_auth_app/i18n.html" [:#i18n]
+  [code]
+
+  [:#i18n]
+  (letfn [(make-html [text & {:keys [link title]}]
+            (html/transform
+             [:#text] 
+                (html/content text)
+                [:#link]
+                  (html/set-attr :href link
+                                 :title title)))]
+    (case code
+      :activation-code-not-found (make-html
+                                  "Activation code not found. Please make sure that the link that you opened in your browser is the same as the one you received by email. If problems continue, please contact us at "
+                                  :href "http://google.com"
+                                  :title "Google"))))
 
 
 ; http://www.ibm.com/developerworks/java/library/j-clojure-protocols/
@@ -218,3 +242,113 @@
       ([this] this)
       ([this options] this)))
 
+(def traslate-code-en
+    {:account-activation-failed-page-title
+     (str*
+      "Account activation failed — " config/app-name)
+   :activation-code-not-found
+     (str*
+      "Activation code not found. Please make sure that the link that "
+      "you opened in your browser is the same as the one you received "
+      "by email. If problems continue, please contact us at "
+      contact-link " .")
+   :activation-code-sent
+     "Email sent with your activation code. Thanks for signing up!"
+   :activation-code-taken
+     (str*
+      "Generated activation code is already taken. "
+      "Please try it again.")
+   :admin-page-title
+     (str*
+      "Admin — " config/app-name)
+   :cancel-change
+     "Cancel change"
+   :change-password-page-title
+     (str*
+      "Change password — " config/app-name)
+   :email-change-code-not-found
+     "Email change code not found."
+   :email-change-confirmation-sent
+      #(str "Email sent to " (:email %)
+            " with a link to confirm the address change.")
+   :email-change-confirmed
+     "Email change confirmed."
+   :email-not-found
+     "Email not found"
+   :email-taken
+     "Email already taken."
+   :expired-activation-code
+      #(str "Expired activation code. <a data-method=\"post\" href="\"
+            (url "/resend-activation" {:email (:email %)})
+            "\">Get a new activation email with a new code</a>.")
+   :expired-password-reset-code
+     "Expired reset code. You can request a new one below."
+   :forgot-password-page-title
+     (str*
+      "Forgot password — " config/app-name)
+   :home-page-title
+     (str config/app-name)
+   :insert-error
+     (str*
+      "There was an error, please try again. If problems continue, "
+      "contact us at " contact-link " .")
+   :invalid-email 
+     "Email not valid."
+   :invalid-username
+     "Username can contain only letters (no accents), numbers, dots (.), hyphens (-) and underscores (_)."
+   :login-page-title
+     (str*
+      "Login — " config/app-name)
+   :new-requested-email-taken
+     "Email already taken."
+   :new-requested-email-taken-by-not-yet-activated-account
+      #(str "Email already taken but not confirmed yet. <a href=\""
+            ; http://weavejester.github.com/hiccup/hiccup.util.html#var-url
+            (url "/resend-activation" {:email (:new_requested_email %)})
+            "\" data-method=\"post\">Resend confirmation email</a>.")
+   :not-yet-activated
+      #(str "Account not yet activated. <a data-method=\"post\" href=\""
+            (url "/resend-activation" {:email (:email %)})
+            "\">Resend activation email</a>.")
+   :password-changed
+     "Your password has been changed."
+   :password-reset-code-not-found
+     (str*
+      "Reset code not found. You can try asking for a new one below. "
+      "If problems continue, please contact us at ")
+   :password-reset-code-taken
+     (str*
+      "Generated password reset code is already taken. "
+      "Please try it again.")
+   :password-too-short
+     "Password must be at least 5 characters."
+   :resend-activation-page-title
+      (fn [_]
+            config/app-name)
+   :resend-confirmation
+     "Resend confirmation"
+   :settings-page-title
+     (str*
+      "Settings — " config/app-name)
+   :signup-page-title
+     (str*
+      "Signup — " config/app-name)
+   :taken-by-not-yet-activated-account
+      #(str "Email already taken but not confirmed yet. <a href=\""
+            ; http://weavejester.github.com/hiccup/hiccup.util.html#var-url
+            (url "/resend-activation" {:email (:email %)})
+            "\" data-method=\"post\">Resend confirmation email</a>.")
+   :update-error
+     (str*
+      "There was an error, please try again. If problems continue, "
+      "contact us at "
+      :title config/contact-email
+      :href (str* "mailto:" config/contact-email))
+   :username-taken
+     "That username is already taken."
+   :username-too-long
+     "Username must be less than 30 characters."      
+   :username-too-short
+     "Username must be at least 2 characters."
+   :wrong-login-credential
+     "Wrong username/email or password"})

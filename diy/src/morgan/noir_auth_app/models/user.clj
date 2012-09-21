@@ -582,8 +582,10 @@
     (if (nil? activation-code)
         (if (and stored-pass 
                  (crypt/compare password stored-pass))
-            user
-            (vali/set-error :password "Wrong username/email or password"))
+          user
+          
+          (do
+            (vali/set-error :password :wrong-login-credential)))
         (vali/set-error :activation_code :not-yet-activated))))
 
 

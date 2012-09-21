@@ -41,7 +41,7 @@
                            [org.clojure/data.json "0.1.2"]
                            [com.draines/postal "1.8.0"]
                            [clojurewerkz/quartzite "1.0.0-rc6"]
-                           [abengoa/clj-stripe "1.0.0"]
+                           [org.clojars.siscia/clj-stripe "1.0.3"]
                            [jayq "0.1.0-alpha4"]
                            [fetch "0.1.0-alpha2"]
                            [enlive "1.0.1"]]
